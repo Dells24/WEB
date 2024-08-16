@@ -1,0 +1,167 @@
+﻿<table class="table table-bordered timetable-table" id="timetable">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>8:00 - 10:00</th>
+                    <th>10:00 - 13:00</th>
+                    <th>13:00 - 16:00</th>
+                    <th>16:00 - 19:00</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>Monday</td>
+                    
+                    <td>
+                        
+                        <div>BBA 2105 Creating a Winning Business (Mr. Manirafasha Moses)</div>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                        <div>BBA 1204 Principles of Management (Mr. Zigira Sam)</div>
+                        
+                        <div>BBA 3106 Quality &amp; systems mgt (Ms. Ahumuza Audrey)</div>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Tuesday</td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Wednesday</td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Thursday</td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Friday</td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Saturday</td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Sunday</td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                    <td>
+                        
+                    </td>
+                    
+                </tr>
+                
+            </tbody>
+        </table>

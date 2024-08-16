@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Research Guide{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
+ <style>
+    body {
+      padding: 20px;
+    }
+    .form-section {
+      margin-bottom: 20px;
+    }
+    .form-section h4 {
+      margin-bottom: 15px;
+    }
+    .data-field {
+      font-weight: bold;
+    }
+   
+  </style>
+    
+</head>
+<body>
+
+    {% block content %}
+
+
+    <div class="container">
+        <h1 class="text-center">Student Research Supervision Progress Form</h1>
+        
+        <div class="form-section">
+          <h4>Student Information</h4>
+          <div class="row">
+            <div class="col-sm-2">Name:</div>
+            <div class="col-sm-10 data-field">{{ student.name }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Student ID:</div>
+            <div class="col-sm-10 data-field">{{ student.id }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Email:</div>
+            <div class="col-sm-10 data-field">{{ student.email }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Program of Study:</div>
+            <div class="col-sm-10 data-field">{{ student.program }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Supervisor(s):</div>
+            <div class="col-sm-10 data-field">{{ student.supervisor }}</div>
+          </div>
+        </div>
+    
+        <div class="form-section">
+          <h4>Research Project Information</h4>
+          <div class="row">
+            <div class="col-sm-2">Research Title:</div>
+            <div class="col-sm-10 data-field">{{ student.research_project.title }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Research Objectives:</div>
+            <div class="col-sm-10 data-field">{{ student.research_project.objectives }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Start Date:</div>
+            <div class="col-sm-4 data-field">{{ student.research_project.start_date }}</div>
+            <div class="col-sm-2">Expected Completion Date:</div>
+            <div class="col-sm-4 data-field">{{ student.research_project.expected_completion_date }}</div>
+          </div>
+        </div>
+    
+        <div class="form-section">
+          <h4>Progress Overview</h4>
+          <div class="row">
+            <div class="col-sm-2">Period Covered:</div>
+            <div class="col-sm-4 data-field">{{ progress_summary.period_covered }}</div>
+          </div>
+        </div>
+    
+        <div class="form-section">
+          <h4>Meetings and Discussions</h4>
+          <div class="row">
+            <div class="col-sm-2">Date of Last Meeting:</div>
+            <div class="col-sm-4 data-field">{{ progress_summary.last_meeting_date }}</div>
+            <div class="col-sm-2">Frequency of Meetings:</div>
+            <div class="col-sm-4 data-field">{{ progress_summary.meeting_frequency }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Summary of Last Meeting:</div>
+            <div class="col-sm-10 data-field">{{ progress_summary.last_meeting_summary }}</div>
+          </div>
+        </div>
+    
+        <div class="form-section">
+          <h4>Research Progress</h4>
+          <div class="row">
+            <div class="col-sm-2">Tasks Completed:</div>
+            <div class="col-sm-10 data-field">
+              <ul>
+                {% for task in research_progress.tasks_completed %}
+                  <li>{{ task }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Milestones Achieved:</div>
+            <div class="col-sm-10 data-field">
+              <ul>
+                {% for milestone in research_progress.milestones_achieved %}
+                  <li>{{ milestone }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+    
+        <div class="form-section">
+          <h4>Challenges and Issues</h4>
+          <div class="row">
+            <div class="col-sm-2">Challenges Faced:</div>
+            <div class="col-sm-10 data-field">{{ progress_summary.challenges_faced }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Issues to be Addressed:</div>
+            <div class="col-sm-10 data-field">{{ progress_summary.issues_to_be_addressed }}</div>
+          </div>
+        </div>
+    
+        <div class="form-section">
+          <h4>Feedback from Supervisor</h4>
+          <div class="row">
+            <div class="col-sm-2">Supervisor’s Comments:</div>
+            <div class="col-sm-10 data-field">{{ progress_summary.supervisor_comments }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Areas for Improvement:</div>
+            <div class="col-sm-10 data-field">{{ progress_summary.areas_for_improvement }}</div>
+          </div>
+        </div>
+    
+        <div class="form-section">
+          <h4>Future Plans</h4>
+          <div class="row">
+            <div class="col-sm-2">Tasks for Next Meeting:</div>
+            <div class="col-sm-10 data-field">
+              <ul>
+                {% for task in future_plans.tasks_for_next_meeting %}
+                  <li>{{ task }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Upcoming Milestones:</div>
+            <div class="col-sm-10 data-field">
+              <ul>
+                {% for milestone in future_plans.upcoming_milestones %}
+                  <li>{{ milestone }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Next Meeting Date:</div>
+            <div class="col-sm-4 data-field">{{ future_plans.next_meeting_date }}</div>
+          </div>
+        </div>
+    
+        <div class="form-section">
+          <h4>Additional Comments</h4>
+          <div class="row">
+            <div class="col-sm-2">Student’s Comments:</div>
+            <div class="col-sm-10 data-field">{{ progress_summary.student_comments }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Additional Notes:</div>
+            <div class="col-sm-10 data-field">{{ progress_summary.additional_notes }}</div>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <h4>Signatures</h4>
+          <div class="row">
+            <div class="col-sm-2">Student’s Signature:</div>
+            <div class="col-sm-4 data-field">___________________</div>
+            <div class="col-sm-2">Date:</div>
+            <div class="col-sm-4 data-field">{{ progress_summary.student_signature_date }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">Supervisor’s Signature:</div>
+            <div class="col-sm-4 data-field">___________________</div>
+            <div class="col-sm-2">Date:</div>
+            <div class="col-sm-4 data-field">{{ progress_summary.supervisor_signature_date }}</div>
+          </div>
+        </div>
+        
+        <button class="btn btn-primary print-button" onclick="printHiddenPage()">Print</button>
+      </div>
+    
+      <!-- Hidden Print Page -->
+      <div id="hiddenPrintPage" class="hidden">
+        <div class="container">
+          <h1 class="text-center">Student Research Supervision Progress Form</h1>
+          
+          <div class="form-section">
+            <h4>Student Information</h4>
+            <div class="row">
+              <div class="col-sm-2">Name:</div>
+              <div class="col-sm-10 data-field">{{ student.name }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Student ID:</div>
+              <div class="col-sm-10 data-field">{{ student.id }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Email:</div>
+              <div class="col-sm-10 data-field">{{ student.email }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Program of Study:</div>
+              <div class="col-sm-10 data-field">{{ student.program }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Supervisor(s):</div>
+              <div class="col-sm-10 data-field">{{ student.supervisor }}</div>
+            </div>
+          </div>
+    
+          <div class="form-section">
+            <h4>Research Project Information</h4>
+            <div class="row">
+              <div class="col-sm-2">Research Title:</div>
+              <div class="col-sm-10 data-field">{{ student.research_project.title }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Research Objectives:</div>
+              <div class="col-sm-10 data-field">{{ student.research_project.objectives }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Start Date:</div>
+              <div class="col-sm-4 data-field">{{ student.research_project.start_date }}</div>
+              <div class="col-sm-2">Expected Completion Date:</div>
+              <div class="col-sm-4 data-field">{{ student.research_project.expected_completion_date }}</div>
+            </div>
+          </div>
+    
+          <div class="form-section">
+            <h4>Progress Overview</h4>
+            <div class="row">
+              <div class="col-sm-2">Period Covered:</div>
+              <div class="col-sm-4 data-field">{{ progress_summary.period_covered }}</div>
+            </div>
+          </div>
+    
+          <div class="form-section">
+            <h4>Meetings and Discussions</h4>
+            <div class="row">
+              <div class="col-sm-2">Date of Last Meeting:</div>
+              <div class="col-sm-4 data-field">{{ progress_summary.last_meeting_date }}</div>
+              <div class="col-sm-2">Frequency of Meetings:</div>
+              <div class="col-sm-4 data-field">{{ progress_summary.meeting_frequency }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Summary of Last Meeting:</div>
+              <div class="col-sm-10 data-field">{{ progress_summary.last_meeting_summary }}</div>
+            </div>
+          </div>
+    
+          <div class="form-section">
+            <h4>Research Progress</h4>
+            <div class="row">
+              <div class="col-sm-2">Tasks Completed:</div>
+              <div class="col-sm-10 data-field">
+                <ul>
+                  {% for task in research_progress.tasks_completed %}
+                    <li>{{ task }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Milestones Achieved:</div>
+              <div class="col-sm-10 data-field">
+                <ul>
+                  {% for milestone in research_progress.milestones_achieved %}
+                    <li>{{ milestone }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+    
+          <div class="form-section">
+            <h4>Challenges and Issues</h4>
+            <div class="row">
+              <div class="col-sm-2">Challenges Faced:</div>
+              <div class="col-sm-10 data-field">{{ progress_summary.challenges_faced }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Issues to be Addressed:</div>
+              <div class="col-sm-10 data-field">{{ progress_summary.issues_to_be_addressed }}</div>
+            </div>
+          </div>
+    
+          <div class="form-section">
+            <h4>Feedback from Supervisor</h4>
+            <div class="row">
+              <div class="col-sm-2">Supervisor’s Comments:</div>
+              <div class="col-sm-10 data-field">{{ progress_summary.supervisor_comments }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Areas for Improvement:</div>
+              <div class="col-sm-10 data-field">{{ progress_summary.areas_for_improvement }}</div>
+            </div>
+          </div>
+    
+          <div class="form-section">
+            <h4>Future Plans</h4>
+            <div class="row">
+              <div class="col-sm-2">Tasks for Next Meeting:</div>
+              <div class="col-sm-10 data-field">
+                <ul>
+                  {% for task in future_plans.tasks_for_next_meeting %}
+                    <li>{{ task }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Upcoming Milestones:</div>
+              <div class="col-sm-10 data-field">
+                <ul>
+                  {% for milestone in future_plans.upcoming_milestones %}
+                    <li>{{ milestone }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Next Meeting Date:</div>
+              <div class="col-sm-4 data-field">{{ future_plans.next_meeting_date }}</div>
+            </div>
+          </div>
+    
+          <div class="form-section">
+            <h4>Additional Comments</h4>
+            <div class="row">
+              <div class="col-sm-2">Student’s Comments:</div>
+              <div class="col-sm-10 data-field">{{ progress_summary.student_comments }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Additional Notes:</div>
+              <div class="col-sm-10 data-field">{{ progress_summary.additional_notes }}</div>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h4>Signatures</h4>
+            <div class="row">
+              <div class="col-sm-2">Student’s Signature:</div>
+              <div class="col-sm-4 data-field">___________________</div>
+              <div class="col-sm-2">Date:</div>
+              <div class="col-sm-4 data-field">{{ progress_summary.student_signature_date }}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">Supervisor’s Signature:</div>
+              <div class="col-sm-4 data-field">___________________</div>
+              <div class="col-sm-2">Date:</div>
+              <div class="col-sm-4 data-field">{{ progress_summary.supervisor_signature_date }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <script>
+        function printHiddenPage() {
+          const printContent = document.getElementById('hiddenPrintPage').innerHTML;
+          const originalContent = document.body.innerHTML;
+          document.body.innerHTML = printContent;
+          window.print();
+          document.body.innerHTML = originalContent;
+        }
+      </script>
+    {% endblock %}
+
+</body>
+</html>
+

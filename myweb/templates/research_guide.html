@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Research Guide{% endblock %}</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+        * {
+            list-style: none;
+            text-decoration: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+        body {
+            background: #f5f6fa;
+        }
+        .wrapper .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 225px;
+            height: 80%;
+            transition: all 5.5s ease;
+            color: #01251e;
+            border-right: 1px solid ;
+            background-color: #013501;;
+        }
+        .wrapper .sidebar .profile {
+            margin-bottom: 30px;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .wrapper .sidebar .profile img {
+            width: 100px;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+        .wrapper .sidebar .profile h5, .wrapper .sidebar .profile p {
+            color: #000;
+        }
+        .wrapper .sidebar ul {
+            padding: 20px 0;
+        }
+        .wrapper .sidebar ul li {
+            padding: 10px 30px;
+        }
+        .wrapper .sidebar ul li a {
+            color: #026dd1;
+            display: flex;
+            align-items: center;
+        }
+        .wrapper .sidebar ul li a .icon {
+            margin-right: 10px;
+        }
+        .wrapper .sidebar ul li a:hover,
+        .wrapper .sidebar ul li a.active {
+            background: #ffffff;
+            color: #022B00;
+            padding: 7px;
+            margin:0px;
+        }
+        .wrapper .sidebar ul li a:hover .icon,
+        .wrapper .sidebar ul li a.active .icon {
+            color: #022B00;
+        }
+        .wrapper .section {
+            margin-left: 225px;
+            transition: all 0.9s ease;
+            padding: 20px;
+        }
+        .wrapper .section .top_navbar {
+            height: 50px;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            background-color: #013501;
+            color: #ffffff;
+        }
+        .wrapper .section .top_navbar .hamburger {
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .content .section-header {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .content .section-body {
+            font-size: 16px;
+        }
+        body.active .wrapper .sidebar {
+            left: -225px;
+        }
+        body.active .wrapper .section {
+            margin-left: 0;
+        }
+    </style>
+</head>
+<body style="background-color: #f5f8eb;">
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="profile">
+                <img src="{{ student.profile_image.url }}" alt="{{ student.name }}'s Profile Image">
+                <h5>{{ student.name }}</h5>
+                <p>Designer</p>
+            </div>
+            <ul>
+                <li><a href="#" id="home" class="active"><span class="icon"><i class="fas fa-home"></i></span> Home</a></li>
+                <li><a href="#" id="dashboard"><span class="icon"><i class="fas fa-desktop"></i></span> Dashboard</a></li>
+                <li><a href="#" id="people"><span class="icon"><i class="fas fa-user-friends"></i></span> People</a></li>
+                <li><a href="#" id="performance"><span class="icon"><i class="fas fa-tachometer-alt"></i></span> Performance</a></li>
+                <li><a href="#" id="development"><span class="icon"><i class="fas fa-database"></i></span> Development</a></li>
+                <li><a href="#" id="reports"><span class="icon"><i class="fas fa-chart-line"></i></span> Reports</a></li>
+                <li><a href="#" id="admin"><span class="icon"><i class="fas fa-user-shield"></i></span> Admin</a></li>
+                <li><a href="#" id="settings"><span class="icon"><i class="fas fa-cog"></i></span> Settings</a></li>
+            </ul>
+        </div>
+        <div class="section">
+            <div class="top_navbar">
+                <div class="hamburger"><i class="fas fa-bars"></i></div>
+            </div>
+            <div class="content">
+                <div id="content-area">
+                    <h2 class="section-header">Welcome to the Dashboard</h2>
+                    <p class="section-body">Select an item from the sidebar to view content here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var sidebarLinks = document.querySelectorAll(".sidebar ul li a");
+        var contentArea = document.getElementById("content-area");
+
+        sidebarLinks.forEach(function(link) {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+                
+                sidebarLinks.forEach(function(link) {
+                    link.classList.remove("active");
+                });
+                
+                this.classList.add("active");
+                
+                var id = this.id;
+                switch (id) {
+                    case "home":
+                        contentArea.innerHTML = `
+                            <h2 class="section-header">Research Topic</h2>
+                            <p class="section-body">
+                                <strong>Topic:</strong> {{ student.selected_topic }}<br>
+                                <strong>Start Date:</strong> {{ student.start_date }}<br>
+                                <strong>Expected Graduation Date:</strong> {{ student.graduation_date }}
+                            </p>`;
+                        break;
+                    case "dashboard":
+                        contentArea.innerHTML = `
+                            <h2 class="section-header">My Dashboard</h2>
+                            <p class="section-body">Here is your dashboard overview. Monitor your activities and performance here.</p>`;
+                        break;
+                    case "people":
+                        contentArea.innerHTML = `
+                            <h2 class="section-header">People</h2>
+                            <p class="section-body">Manage and view people in your network. Connect and collaborate with others.</p>`;
+                        break;
+                    case "performance":
+                        contentArea.innerHTML = `
+                            <h2 class="section-header">Performance</h2>
+                            <p class="section-body">Performance metrics and analytics are displayed here. Track your progress and achievements.</p>`;
+                        break;
+                    case "development":
+                        contentArea.innerHTML = `
+                            <h2 class="section-header">Development</h2>
+                            <p class="section-body">Development resources and tools can be accessed here. Enhance your skills and work on projects.</p>`;
+                        break;
+                    case "reports":
+                        contentArea.innerHTML = `
+                            <h2 class="section-header">Reports</h2>
+                            <p class="section-body">Generate and view reports. Analyze data and insights to make informed decisions.</p>`;
+                        break;
+                    case "admin":
+                        contentArea.innerHTML = `
+                            <h2 class="section-header">Admin</h2>
+                            <p class="section-body">Admin controls and settings are available here. Manage user permissions and system settings.</p>`;
+                        break;
+                    case "settings":
+                        contentArea.innerHTML = `
+                            <h2 class="section-header">Settings</h2>
+                            <p class="section-body">Customize your settings here. Adjust preferences and manage your account.</p>`;
+                        break;
+                    default:
+                        contentArea.innerHTML = `
+                            <h2 class="section-header">Welcome</h2>
+                            <p class="section-body">Select an item from the sidebar to view content here.</p>`;
+                        break;
+                }
+            });
+        });
+
+        document.querySelector(".hamburger").addEventListener("click", function() {
+            document.body.classList.toggle("active");
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

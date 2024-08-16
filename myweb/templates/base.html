@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}forest experts {% endblock %} </title>
+	<link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    
+    <style rel="stylesheet" type="text/css">
+
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="innertop" style="width: 70%; margin-left: auto; margin-right: auto; padding: 10px;;">
+            <div class="row">
+                <div class="col-md-1 col-sm-3" style="position: relative;">
+                    <img src="{%static 'miu-logo.png'%}"  style="width: 100px;">
+    
+                </div>
+                <div class="col-md-11 col-sm-7    ">
+                    <b><h4 style="padding: 5PX; margin-left: 4%; margin-top: 3%; font-weight: 700; font-family: serif;">METROPOLITAN INTERNATIONAL UNIVERSITY</h4></b>
+    
+                </div>
+             
+            </div>
+    
+
+        </div>
+    </div>
+	
+    
+    {% block content %} {% endblock %} 
+
+</body>
+</html>

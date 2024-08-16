@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+  <h1>Notifications</h1>
+  <ul id="notifications-list">
+    {% for log in log_entries %}
+      <li>{{ log.action_time }} - {{ log.get_change_message }} - IP: {{ log.ip_address }} - MAC: {{ log.mac_address }}</li>
+    {% endfor %}
+  </ul>
+  <script>
+    const notificationsList = document.getElementById('notifications-list');
+    const socket = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
+
+    socket.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      const newNotification = document.createElement('li');
+      newNotification.textContent = `${data.message} - IP: ${data.ip_address} - MAC: ${data.mac_address}`;
+      notificationsList.appendChild(newNotification);
+    };
+  </script>
+{% endblock %}
