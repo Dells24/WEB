@@ -1,18 +1,141 @@
-{% extends 'base.html' %}
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>{% block title %}home {% endblock %} </title>
-	<link rel="stylesheet" href="{% static 'styles.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Voting System</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-	
-    {% block content %}
-	    <div class="banner">
-		    <h1 >STUDENTS RESEARCH GUIDE SYSTEM</h1>
-	    </div>
-    {% endblock %} 
+    <div class="container">
+        <center>
+            <img src="{% static 'miu-logo.png' %}" style="width: 100px;">
+            <h4 style="font-family: poppins; font-weight: bold;">METROPOLITAN INTERNATIONAL UNIVERSITY</h4><hr>
+            <P style="font-family: 'MyCalligraphy', cursive; font-weight: bold;">Alumni Voting 2024</P>
+        </center>
+        <header>
+            <h4 style="font-family: poppins; font-weight: bold;">Welcome to the Voting System</h4>
+            <p>Choose an option below to get started:</p>
+        </header>
+        
+        <nav class="navigation">
+            <a href="{% url 'vote' %}" class="nav-link btn-primary">Vote Now</a>
+            <a href="{% url 'success' %}" class="nav-link btn-secondary">View Results</a>
+            <a href="#candidates" class="nav-link btn-secondary">View Candidates</a>
+        </nav>
 
+        <section id="candidates" class="candidates-section">
+            <h2>Meet the Candidates</h2>
+            {% if positions_with_candidates %}
+                {% for position, candidates in positions_with_candidates.items %}
+                    <div class="position-candidates">
+                        <h3>{{ position }}</h3>
+                        <ul class="candidate-list">
+                            {% for candidate in candidates %}
+                                <li class="candidate-item">
+                                    <strong>{{ candidate.name }}</strong> - {{ candidate.position.title }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No candidates are currently available.</p>
+            {% endif %}
+        </section>
+
+        <footer>
+            <p>&copy; {{ year }} Voting System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #4CAF50;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .nav-link {
+            padding: 15px 30px;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: #007bff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0056b3;
+        }
+
+        .candidates-section {
+            margin-top: 40px;
+        }
+
+        .position-candidates {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+
+        .candidate-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .candidate-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .candidate-item:last-child {
+            border-bottom: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+        }
+    </style>
 </body>
 </html>

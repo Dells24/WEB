@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cast Your Vote</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <center>
+            <img src="{% static 'miu-logo.png' %}" style="width: 100px;">
+            <h4 style="font-family: poppins; font-weight: bold;">METROPOLITAN INTERNATIONAL UNIVERSITY</h4>
+            <p style="font-family: 'MyCalligraphy', cursive; font-weight: bold;">Alumni Voting 2024</p>
+        </center>
+        
+        <h1>Cast Your Vote</h1>
+        
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <p>Welcome, {{ student.name }}. Please select a candidate to cast your vote for each position.</p>
+
+        <form method="post" action="{% url 'vote' %}">
+            {% csrf_token %}
+            {% for position in positions %}
+                <div class="position-vote">
+                    <h4 style="color: #4CAF50;">{{ position.title }}</h4>
+                    {% if position in voted_positions %}
+                        <div class="message error">You have already voted for this position.</div>
+                    {% else %}
+                        <ul class="candidate-list">
+                            {% for candidate in candidates %}
+                                {% if candidate.position.id == position.id %}
+                                    <li class="candidate-item">
+                                        <label>
+                                            <input type="radio" name="position_{{ position.id }}" value="{{ candidate.id }}">
+                                            {% if candidate.image %}
+                                                <img src="{{ candidate.image.url }}" alt="{{ candidate.name }}" class="candidate-image">
+                                            {% else %}
+                                                <img src="{% static 'images/default_candidate.png' %}" alt="No Image Available" class="candidate-image">
+                                            {% endif %}
+                                            <span class="candidate-name">{{ candidate.name }}</span>
+                                        </label>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+          
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Submit Vote</button>
+        </form>
+
+        <a href="{% url 'home' %}" class="round">home</a>
+    </div>
+
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        h4 {
+            margin-top: 20px;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .position-vote {
+            margin-bottom: 20px;
+        }
+
+        .candidate-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .candidate-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        .candidate-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .candidate-image {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+
+        .candidate-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .messages {
+            margin-bottom: 15px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</body>
+</html>

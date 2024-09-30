@@ -1,138 +1,144 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
 from django.views import View
-from .models import Student, ResearchTopic, Milestone, Meeting, ResearchFile
-from .forms import StudentForm, ResearchTopicFormSet, RegistrationNumberForm, ResearchFileForm
-from django.urls import reverse
+from .models import Student, Candidate, Position, Vote
+from .forms import StudentForm, LoginForm
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
-class StudentIDInputView(View):
-    template_name = 'student_id_input.html'
 
-    def get(self, request):
-        # Fetch the last five students who have submitted their research topics
-        latest_students = Student.objects.filter(selected_topic__isnull=False).order_by('-selected_topic__id')[:5]
-        return render(request, self.template_name, {
-            'latest_students': latest_students,
-        })
-
-def students_without_topics(request):
-    students_without_topics = Student.objects.filter(selected_topic__isnull=True)
-    return render(request, 'admin/students_without_topics.html', {
-        'students': students_without_topics,
-    })
+from datetime import datetime
+from django.shortcuts import render
+from django.db.models import Count
+from .models import Candidate
 
 def home(request):
-    return render(request, 'home.html')
+    # Get all candidates grouped by their positions
+    candidates = Candidate.objects.select_related('position').annotate(vote_count=Count('vote'))
 
-def all(request):
-    template_name = 'all.html'
-    return render(request, 'all.html')
+    # Group candidates by position
+    positions_with_candidates = {}
+    for candidate in candidates:
+        position_title = candidate.position.title  # Assuming your Position model has a 'title' field
+        if position_title not in positions_with_candidates:
+            positions_with_candidates[position_title] = []
+        positions_with_candidates[position_title].append(candidate)
 
-class StudentResearchGuideView(View):
-    template_name = 'research_guide.html'
+    return render(request, 'home.html', {
+        'positions_with_candidates': positions_with_candidates,
+        'year': datetime.now().year,
+    })
 
-    def get(self, request):
-        reg_no = request.GET.get('reg_no')
-        if not reg_no:
-            return redirect('student_id_input')
 
-        student = get_object_or_404(Student, reg_no=reg_no)
-        research_project = student.selected_topic
-        milestones = Milestone.objects.filter(student=student).order_by('due_date')
-        total_milestones = milestones.count()
-        completed_milestones = milestones.filter(completion_date__isnull=False).count()
-        progress = (completed_milestones / total_milestones) * 100 if total_milestones > 0 else 0
-        meetings = Meeting.objects.filter(student=student).order_by('date')
-        research_files = ResearchFile.objects.filter(student=student)
 
-        file_form = ResearchFileForm()
 
-        context = {
-            'student': student,
-            'research_project': research_project,
-            'milestones': milestones,
-            'progress': progress,
-            'meetings': meetings,
-            'file_form': file_form,
-            'research_files': research_files,  # Add this line
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request):
-        reg_no = request.GET.get('reg_no')
-        student = get_object_or_404(Student, reg_no=reg_no)
-
-        file_form = ResearchFileForm(request.POST, request.FILES)
-        if file_form.is_valid():
-            research_file = file_form.save(commit=False)
-            research_file.student = student
-            research_file.save()
-            return redirect(reverse('research_guide') + f'?reg_no={student.reg_no}')
-
-        research_project = student.selected_topic
-        milestones = Milestone.objects.filter(student=student).order_by('due_date')
-        total_milestones = milestones.count()
-        completed_milestones = milestones.filter(completion_date__isnull=False).count()
-        progress = (completed_milestones / total_milestones) * 100 if total_milestones > 0 else 0
-        meetings = Meeting.objects.filter(student=student).order_by('date')
-        research_files = ResearchFile.objects.filter(student=student)
-
-        context = {
-            'student': student,
-            'research_project': research_project,
-            'milestones': milestones,
-            'progress': progress,
-            'meetings': meetings,
-            'file_form': file_form,
-            'research_files': research_files,  # Add this line
-        }
-        return render(request, self.template_name, context)
-    
-def view_research_data(request):
-    research_data = None
-    form = RegistrationNumberForm()
-
-    if request.method == 'POST':
-        form = RegistrationNumberForm(request.POST)
-        if form.is_valid():
-            reg_no = form.cleaned_data['reg_no']
-            try:
-                student = Student.objects.get(reg_no=reg_no)
-                research_data = {
-                    'student': student,
-                    'research_topics': student.selected_topic,
-                    'milestones': student.milestone_set.all(),
-                    'meetings': student.meeting_set.all(),
-                }
-            except Student.DoesNotExist:
-                research_data = 'Student not found.'
-
-    return render(request, 'view_research_data.html', {'form': form, 'research_data': research_data})
-
-def student_list(request):
-    students = Student.objects.select_related('supervisor', 'selected_topic')
-    return render(request, 'student_list.html', {'students': students})
 
 def register(request):
     if request.method == 'POST':
         student_form = StudentForm(request.POST)
-        topic_formset = ResearchTopicFormSet(request.POST)
-        if student_form.is_valid() and topic_formset.is_valid():
+        if student_form.is_valid():
             student = student_form.save()
-            topics = topic_formset.save(commit=False)
-            for topic in topics:
-                topic.student = student
-                topic.save()
-            return redirect('success')
+            messages.success(request, "Registration successful. Please check your email for login details.")
+            return redirect('login')  # Redirect to login page after successful registration
     else:
         student_form = StudentForm()
-        topic_formset = ResearchTopicFormSet(queryset=ResearchTopic.objects.none())
 
-    return render(request, 'register.html', {
-        'student_form': student_form,
-        'topic_formset': topic_formset,
+    return render(request, 'register.html', {'student_form': student_form})
+
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            reg_no = form.cleaned_data['reg_no']
+            password = form.cleaned_data['password']
+            student = authenticate(request, reg_no=reg_no, password=password)
+            if student is not None:
+                login(request, student)
+                return redirect('vote')
+            else:
+                form.add_error(None, "Invalid registration number or password.")
+    else:
+        form = LoginForm()
+
+    return render(request, 'login.html', {'form': form})
+
+@login_required
+def logout_view(request):
+    logout(request)
+    messages.info(request, "You have been logged out.")
+    return redirect('login')
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Candidate, Position, Vote
+
+@login_required
+def vote(request):
+    student = request.user  # Assuming you're using a custom user model for students
+
+    # Retrieve all the votes the student has already cast
+    votes = Vote.objects.filter(student=student)
+
+    # Create a set of positions the student has already voted for
+    voted_positions = set(vote.candidate.position for vote in votes)
+
+    # Handle the POST request when the form is submitted
+    if request.method == 'POST':
+        selected_candidates = {}
+
+        for position in Position.objects.all():
+            candidate_id = request.POST.get(f'position_{position.id}')
+            if candidate_id:
+                # Check if the student has already voted for this position
+                if position in voted_positions:
+                    messages.error(request, f"You have already voted for the position: {position.title}.")
+                    return redirect('vote')
+
+                # Create a Vote entry
+                candidate = Candidate.objects.get(id=candidate_id)
+                Vote.objects.create(student=student, candidate=candidate)
+                voted_positions.add(position)  # Add this position to voted_positions to prevent double voting
+
+        messages.success(request, "Your vote has been successfully cast!")
+        return redirect('success')  # Redirect to results or any appropriate page
+
+    candidates = Candidate.objects.all()
+    positions = Position.objects.all()
+
+    return render(request, 'vote.html', {
+        'candidates': candidates,
+        'positions': positions,
+        'student': student,
+        'voted_positions': voted_positions,
     })
 
-def success(request):
-    return HttpResponse("Registration successful!")
 
+
+from django.shortcuts import render
+from django.db.models import Count
+from .models import Candidate, Student
+
+def success(request):
+    # Get all candidates along with their positions and vote counts
+    candidates = Candidate.objects.select_related('position').annotate(vote_count=Count('vote'))
+
+    # Create a dictionary to group candidates by their positions
+    positions_with_candidates = {}
+    for candidate in candidates:
+        position_title = candidate.position.title  # Assuming your Position model has a 'title' field
+        if position_title not in positions_with_candidates:
+            positions_with_candidates[position_title] = {'candidates': [], 'total_votes': 0}
+        positions_with_candidates[position_title]['candidates'].append(candidate)
+        positions_with_candidates[position_title]['total_votes'] += candidate.vote_count
+
+    # Count total registered students and total votes
+    total_students = Student.objects.count()  # Count of registered students
+    total_votes = sum(candidate.vote_count for candidate in candidates)  # Sum of all votes
+
+    return render(request, 'success.html', {
+        'positions_with_candidates': positions_with_candidates,
+        'total_students': total_students,
+        'total_votes': total_votes,
+    })

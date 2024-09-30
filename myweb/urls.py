@@ -1,12 +1,11 @@
 from django.urls import path
-from .views import StudentResearchGuideView, StudentIDInputView,student_list, register, success,view_research_data, students_without_topics
+from .views import register, login_view, logout_view, vote, success, home
+
 urlpatterns = [
-    path('', StudentIDInputView.as_view(), name='student_id_input'),
-    path('research-guide/', StudentResearchGuideView.as_view(), name='research_guide'),
-    path('students/', student_list, name='student_list'),
-    path('all/', all, name='all'),
+    path('', home, name='home'),
     path('register/', register, name='register'),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('vote/', vote, name='vote'),
     path('success/', success, name='success'),
-    path('view-research-data/', view_research_data, name='view_research_data'),
-    path('students_without_topics/',students_without_topics, name='students_without_topics'),
 ]

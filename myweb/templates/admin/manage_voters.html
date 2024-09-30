@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Voters</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  <!-- Include your CSS -->
+</head>
+<body>
+    <h1>Manage Voters</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Registration Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for voter in voters %}
+                <tr>
+                    <td>{{ voter.name }}</td>
+                    <td>{{ voter.reg_no }}</td>
+                    <td>
+                        <form method="post" action="{% url 'admin_approve_voter' voter.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Approve</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	dfcu Online Banking
+</title><meta name="viewport" content="width=device-width,&#32;initial-scale=1.0" />
+    <script type="text/javascript" src="/Scripts/jquery-3.4.1.min.js?ver=43"></script>
+    <script type="text/javascript" src="/Scripts/jquery-3.4.1.fixes.min.js?ver=43"></script>
+    <script type="text/javascript" src="/Scripts/jquery-ui-1.12.min.js?ver=43"></script>
+    <script type="text/javascript" src="/Scripts/jquery.blockUI.min.js?ver=43"></script>
+    <script type="text/javascript">
+        var perform_acrobat_detection = function () {
+            //
+            // The returned object
+            // 
+            var browser_info = {
+                name: null,
+                acrobat: null,
+                acrobat_ver: null
+            };
+
+            if (navigator && (navigator.userAgent.toLowerCase()).indexOf("chrome") > -1) browser_info.name = "chrome";
+            else if (navigator && (navigator.userAgent.toLowerCase()).indexOf("msie") > -1) browser_info.name = "ie";
+            else if (navigator && (navigator.userAgent.toLowerCase()).indexOf("firefox") > -1) browser_info.name = "firefox";
+            else if (navigator && (navigator.userAgent.toLowerCase()).indexOf("msie") > -1) browser_info.name = "other";
+
+
+            try {
+                if (browser_info.name == "ie") {
+                    var control = null;
+
+                    //
+                    // load the activeX control
+                    //                
+                    try {
+                        // AcroPDF.PDF is used by version 7 and later
+                        control = new ActiveXObject('AcroPDF.PDF');
+                    }
+                    catch (e) { }
+
+                    if (!control) {
+                        try {
+                            // PDF.PdfCtrl is used by version 6 and earlier
+                            control = new ActiveXObject('PDF.PdfCtrl');
+                        }
+                        catch (e) { }
+                    }
+
+                    if (!control) {
+                        browser_info.acrobat == null;
+                        return browser_info;
+                    }
+
+                    version = control.GetVersions().split(',');
+                    version = version[0].split('=');
+                    browser_info.acrobat = "installed";
+                    browser_info.acrobat_ver = parseFloat(version[1]);
+                }
+                else if (browser_info.name == "chrome") {
+                    for (key in navigator.plugins) {
+                        if (navigator.plugins[key].name == "Chrome PDF Viewer" || navigator.plugins[key].name == "Adobe Acrobat") {
+                            browser_info.acrobat = "installed";
+                            browser_info.acrobat_ver = parseInt(navigator.plugins[key].version) || "Chome PDF Viewer";
+                        }
+                    }
+                }
+                //
+                // NS3+, Opera3+, IE5+ Mac, Safari (support plugin array):  check for Acrobat plugin in plugin array
+                //    
+                else if (navigator.plugins != null) {
+                    var acrobat = navigator.plugins['Adobe Acrobat'];
+                    if (acrobat == null) {
+                        browser_info.acrobat = null;
+                        return browser_info;
+                    }
+                    browser_info.acrobat = "installed";
+                    browser_info.acrobat_ver = parseInt(acrobat.version[0]);
+                }
+
+
+            }
+            catch (e) {
+                browser_info.acrobat_ver = null;
+            }
+
+            return browser_info;
+        };
+
+        function CallbackProof(result) {
+            parent.eBankit.Presentation.ShowInitialSreen(result);
+        }
+
+        function CallbackFavorit(result) {
+            parent.eBankit.Presentation.ShowFavInitialSreen(result);
+        }
+    </script>
+</head>
+<body>
+    <form method="post" action="./ProofPage.aspx" id="formPrint">
+<div class="aspNetHidden">
+<input type="hidden" name="_PageGuid" id="_PageGuid" value="8629c8a8-211e-4fe2-ab4b-df6ee0fbdae0" />
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="jO3BrgsUV+Bbc7tv75QrUgEt4cU7yab/9GdvWhfYQRs/PopOJPPKt0WwTUXMuqIiUQOCWJAvbbrrIDF+YXf6kjlRRRKxT6POa1RCYig8y6w=" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['formPrint'];
+if (!theForm) {
+    theForm = document.formPrint;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZPFWm8upQ53i3YgTSYG2YM38kYaLUc0Erlsnp9xhfqL-yYlCh998o6MRFjvvA04uVA2&amp;t=638562669717896622" type="text/javascript"></script>
+
+
+<script src="/ScriptResource.axd?d=D9drwtSJ4hBA6O8UhT6CQumsnCjtQM9QazkFy8vRCrWAPG6ospUjjGXkJSzdbhNNpCw7Bdp9pRhvNTujwg_oWHw5GnPJqa_SRUsFyx5GdvxCLZs9r_bUYqAbvVoiIYuWkrOhWb-rnOLCjbqtNfvr1rntL0b0P8T3rTkQmQYIL3M1&amp;t=7a0cc936" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof(Sys) === 'undefined') throw new Error('ASP.NET Ajax client-side framework failed to load.');
+//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=JnUc-DEDOM5KzzVKtsL1tV-hn5lj7tUS6S7eagD8by99dZhAh1ga4IWGamx1xUnQ07GipNBKmsBYyOOGE7RnfMLM2fub-nAw4qnwS5TcoiUidbXAqlQ0ckZ7WjN_Kpcs44PSR9uEFNND4tVqgNTLkjBtiDzpp1nJ4sclpoKvUbeLGc0wxCuqqykBUaxEw4s80&amp;t=7a0cc936" type="text/javascript"></script>
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="B98CB4D7" />
+</div>
+        <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ScriptManager', 'formPrint', [], [], [], 90, '');
+//]]>
+</script>
+
+        <script type="text/javascript" src="/Scripts/common-1.0.min.js?ver=43"></script>
+        
+        <input type="submit" name="btnPostBack" value="" id="btnPostBack" class="hidden" />
+        <input type="submit" name="btnPostBackPDF" value="" id="btnPostBackPDF" class="hidden" />
+        <input type="submit" name="btnPostBackPDFDoc" value="" id="btnPostBackPDFDoc" class="hidden" />
+        <input type="submit" name="btnPostBackExcel" value="" id="btnPostBackExcel" class="hidden" />
+        <input type="submit" name="btnPostBackXML" value="" id="btnPostBackXML" class="hidden" />
+     
+        <input type="submit" name="btnPostBackTxtStatements" value="" id="btnPostBackTxtStatements" class="hidden" />
+        <input type="submit" name="btnPostBackNotAdobe" value="" id="btnPostBackNotAdobe" class="hidden" />
+        <input type="submit" name="btnPostBackEmail" value="" id="btnPostBackEmail" class="hidden" />
+        <input type="submit" name="btnPostBackAddFav" value="" id="btnPostBackAddFav" class="hidden" />
+        <input type="submit" name="btnPostBackDigitalDoc" value="" id="btnPostBackDigitalDoc" class="hidden" />
+        <input type="submit" name="btnPostBackPS2Doc" value="" id="btnPostBackPS2Doc" class="hidden" />
+        
+
+        <input type="submit" name="btnDownloadFile" value="" id="btnDownloadFile" class="hidden" />
+        
+
+        <input type="hidden" name="hdnPrntJSONType" id="hdnPrntJSONType" />
+        <input type="hidden" name="hdnPrintId" id="hdnPrintId" />
+        <input type="hidden" name="hdnTransactionId" id="hdnTransactionId" />
+        <input type="hidden" name="hdnEmail" id="hdnEmail" />
+        <input type="hidden" name="hdnFavName" id="hdnFavName" />
+        <input type="hidden" name="hdnIsFlowLabel" id="hdnIsFlowLabel" />
+        <input type="hidden" name="hdnIsXMLExport" id="hdnIsXMLExport" />
+        <input type="hidden" name="hdnTitle" id="hdnTitle" />
+        <input type="hidden" name="hdnClientNumber" id="hdnClientNumber" />
+        <input type="hidden" name="hdnDocumentName" id="hdnDocumentName" />
+        <input type="hidden" name="hdnDigitalDocType" id="hdnDigitalDocType" />
+        <input type="hidden" name="hdnDigitalDocDate" id="hdnDigitalDocDate" />
+        <input type="hidden" name="hdnDigitalDocName" id="hdnDigitalDocName" />
+        <input type="hidden" name="hdnPS2DocId" id="hdnPS2DocId" />
+        <input type="hidden" name="hdnPS2DocName" id="hdnPS2DocName" />
+
+        <script type="text/javascript">
+
+            function GenerateDocumentAudit(iddocument) {
+                debugger;
+                $('#hdnPrintId').val(iddocument);
+                $('#btnDownloadFile').click();
+            }
+
+            function GenerateDocument(trxid, printId, isFlowLabel, title) {
+                var hdnPrintId = $("#hdnPrintId");
+                var hdnTransactionId = $("#hdnTransactionId");
+                var hdnIsFlowLabel = $("#hdnIsFlowLabel");
+                var hdnTitle = $("#hdnTitle");
+                hdnTransactionId.val(trxid);
+                hdnPrintId.val(printId);
+                hdnIsFlowLabel.val(isFlowLabel);
+                hdnTitle.val(title);
+
+                if (perform_acrobat_detection().acrobat !== null) {
+                    $("#btnPostBack").click();
+                }
+                else {
+                    $("#btnPostBackNotAdobe").click();
+                }
+            }
+
+            function GenerateDocumentPDF(trxid, printId, isFlowLabel, title) {
+                var hdnPrintId = $("#hdnPrintId");
+                var hdnTransactionId = $("#hdnTransactionId");
+                var hdnIsFlowLabel = $("#hdnIsFlowLabel");
+                var hdnTitle = $("#hdnTitle");
+                hdnTransactionId.val(trxid);
+                hdnPrintId.val(printId);
+                hdnIsFlowLabel.val(isFlowLabel);
+                hdnTitle.val(title);
+
+                $("#btnPostBackPDF").click();
+            }
+
+            function GenerateDocumentXML(trxid, printId, isFlowLabel, title) {
+                var hdnPrintId = $("#hdnPrintId");
+                var hdnTransactionId = $("#hdnTransactionId");
+                var hdnIsFlowLabel = $("#hdnIsFlowLabel");
+                var hdnTitle = $("#hdnTitle");
+                hdnTransactionId.val(trxid);
+                hdnPrintId.val(printId);
+                hdnIsFlowLabel.val(isFlowLabel);
+                hdnTitle.val(title);
+
+                $("#btnPostBackXML").click();
+            }
+
+            function GenerateDocumentTxtStatement(trxid, printId, isFlowLabel, title) {
+
+                var hdnPrintId = $("#hdnPrintId");
+                var hdnTransactionId = $("#hdnTransactionId");
+                var hdnIsFlowLabel = $("#hdnIsFlowLabel");
+                var hdnTitle = $("#hdnTitle");
+                hdnTransactionId.val(trxid);
+                hdnPrintId.val(printId);
+                hdnIsFlowLabel.val(isFlowLabel);
+                hdnTitle.val(title);
+
+                $("#btnPostBackTxtStatements").click();
+            }
+
+            function GeneratePDFDocument(docname, clientnumber) {
+
+                var hdnClientNumber = $("#hdnClientNumber");
+                var hdnDocumentName = $("#hdnDocumentName");
+                hdnClientNumber.val(clientnumber);
+                hdnDocumentName.val(docname);
+
+                $("#btnPostBackPDFDoc").click();
+            }
+
+            function ExportDocument(trxid, typeofdata) {
+                var hdnPrntJSONType = $("#hdnPrntJSONType");
+                var hdnTransactionId = $("#hdnTransactionId");
+                hdnTransactionId.val(trxid);
+                hdnPrntJSONType.val(typeofdata);
+
+                $("#btnPostBackExcel").click();
+            }
+
+
+            function SendDocument(trxid, printId, isFlowLabel, isXMLExport, title, email) {
+                var hdnPrintId = $("#hdnPrintId");
+                var hdnEmail = $("#hdnEmail");
+                var hdnTransactionId = $("#hdnTransactionId");
+                var hdnIsFlowLabel = $("#hdnIsFlowLabel");
+                var hdnIsXMLExport = $("#hdnIsXMLExport");
+                var hdnTitle = $("#hdnTitle");
+
+                hdnIsFlowLabel.val(isFlowLabel);
+                hdnIsXMLExport.val(isXMLExport);
+                hdnPrintId.val(printId);
+                hdnTransactionId.val(trxid);
+                hdnEmail.val(email);
+                hdnTitle.val(title);
+
+                $("#btnPostBackEmail").click();
+            }
+
+            function AddToFavorit(trxid, name) {
+                var hdnFavName = $("#hdnFavName");
+                var hdnTransactionId = $("#hdnTransactionId");
+                hdnTransactionId.val(trxid);
+                hdnFavName.val(name);
+
+                $("#btnPostBackAddFav").click();
+            }
+
+            function ExportDigitalDocument(docType, docDate, docName) {
+                var hdnDigitalDocType = $("#hdnDigitalDocType");
+                var hdnDigitalDocDate = $("#hdnDigitalDocDate");
+                var hdnDigitalDocName = $("#hdnDigitalDocName");
+                hdnDigitalDocType.val(docType);
+                hdnDigitalDocDate.val(docDate);
+                hdnDigitalDocName.val(docName);
+
+                $("#btnPostBackDigitalDoc").click();
+            }
+
+            function ExportPS2File(docId, docName) {
+                var hdnPS2DocId = $("#hdnPS2DocId");
+                var hdnPS2DocName = $("#hdnPS2DocName");
+                hdnPS2DocId.val(docId);
+                hdnPS2DocName.val(docName);
+
+                $("#btnPostBackPS2Doc").click();
+            }
+
+
+        </script>
+    </form>
+
+</body>
+</html>

@@ -1,107 +1,127 @@
-<!-- research/templates/research/register.html -->
-{% extends 'base.html' %}
 {% load static %}
 <!DOCTYPE html>
-{% block content %}
-<html>
+<html lang="en">
 <head>
-    <title>Register</title>
-    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-        
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
-            width: 90%;
+    <style>
+        /* Reduce padding for input fields */
+        .form-group input, .form-group select {
+            padding: 6px; /* Reduced padding */
+            font-size: 12px; /* Slightly smaller font size */
         }
-        h1, h2 {
-            color: #333;
+
+        /* Adjust layout for mobile devices */
+        @media (max-width: 768px) {
+            .col-md-7, .col-md-5 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            /* Center the content for smaller screens */
+            .card {
+                margin-top: 20px;
+            }
+
+            /* Adjust the padding and text alignment */
+            .col-md-7 {
+                padding: 10px;
+                text-align: center;
+            }
+
+            /* Reduce padding inside the card */
+            .card-body {
+                padding: 15px;
+            }
         }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        form > *:not(button) {
-            margin-bottom: 15px;
-            padding: 10px;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 10px 15px;
-            background-color: #007bff;
+
+        .btn-login {
+            background-color: rgba(4, 71, 1, 0.973);
             color: white;
             border: none;
-            border-radius: 4px;
+            padding: 9px 8px;
+            border-radius: 5px;
             cursor: pointer;
+            width: 100%;
         }
-        button:hover {
-            background-color: #0056b3;
+
+        .btn-login:hover {
+            background-color: #003d75;
         }
+
+        .reset-password {
+            display: block;
+            margin-top: 10px;
+            color: #00478b;
+            text-decoration: none;
+        }
+
+        .reset-password:hover {
+            text-decoration: underline;
+        }
+        .center-card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure full viewport height */
+        }
+        input{
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+     
     </style>
 </head>
-<body>
-    
-    
-    <div class="top-bar">
-        <nav class="navbar navbar-expand-lg navbar-dark p-3" style="background: rgba(2, 43, 0, 0.973); font-weight: bold; text-transform: uppercase; width: 100%; margin-left: auto; margin-right: auto; box-shadow: inset 0px 0px 70px 0px rgba(2, 43, 0, 0.973);">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbar" style="width: 70%; margin-left: auto; margin-right: auto;">
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" id="login" href="/#" style="color: aliceblue; margin-left :40px;">Home</a>
-                    <a class="nav-item nav-link" id="logout" href="{% url 'student_list' %}" style="color: aliceblue; margin-left: 40px;">Students</a>
-                    <a class="nav-item nav-link" id="home" href="/student_success" style="color: aliceblue; margin-left:40px;">training</a>
-                    <a class="nav-item nav-link" id="home" href="/admin" style="color: aliceblue; margin-left:40px;">Admin</a>
+<body style="background-color: rgb(241, 248, 255);">
+    <div class="container mt-2">
+        <div  class="row center-card ">
+            <div class="col-lg-10 col-md-10 col-sm-12">
+                <center>
+                    <img src="{% static 'miu-logo.png' %}" style="width: 100px;">
+                    <h4 style="font-family: poppins; font-weight: bold;">METROPOLITAN INTERNATIONAL UNIVERSITY</h4>
+                    <P style="font-family: 'MyCalligraphy', cursive; font-weight: bold;">Alumni Voting 2024</P>
+                </center>
+                <div class="card mt-5" style="background-color: rgb(241, 248, 255);">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Left column for instructions -->
+                            <div class="col-md-7 text-center" style="background-color: rgba(4, 71, 1, 0.973); color:#fff;">
+                                <div style="padding: 20px;">
+                                    <!-- <img src="{% static 'miu-logo.png' %}" style="width: 100px;"> -->
+                                    <h5 style="font-family: Arial; font-weight: bold;">Register Here</h5>
+                                    <hr style="color: #fff; background-color: #fff;">
+                                    <a href="{% url 'login' %}">Already registered, Login Here!</a>
+                                    </div>
+                                    
+                            </div>
+                            <div class="col-md-5">
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ student_form.as_p }}
+    <button type="submit" style="border-radius: 7px; background-color:  rgba(4, 71, 1, 0.973); color:  rgba(255, 255, 255, 0.973); border: none; width: 100%;">Register</button>
+</form>
+{% endblock %}
+
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
-        <div class="innertop" style="width: 70%; margin-left: auto; margin-right: auto; padding: 10px;;">
-          
-    
-
         </div>
-    </div><br>
-    <div class="row">
-        <div class="col-md-5">
-            <div style="padding: 30px;">
-                <center>
-                    <img src="{%static 'miu-logo.png'%}"  class="img-fluid" style="width: 300px;">
-                </center>
-            </div>
-            
-            <b><h3 style="padding: 5PX; margin-left: 4%; text-align: center; margin-top: 3%; font-weight: 700; font-family: serif;">METROPOLITAN INTERNATIONAL UNIVERSITY</h3></b>
-
-
-        </div>
-        <div class="col-md-7">
-            <div class="container">
-        <h1>Student Research Registration</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ student_form.as_p }}
-        {{ topic_formset.management_form }}
-        {% for form in topic_formset %}
-            {{ form.as_p }}
-        {% endfor %}
-        <button type="submit">Register</button>
-    </form>
-
     </div>
-        </div>
 
-    </div>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-{% endblock %}
+
